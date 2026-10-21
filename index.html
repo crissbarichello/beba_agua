@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Protótipo: app de hidratação</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap">
+<style>
+:root{--page:#EEF3F7;--ink:#0E2A3F;--mute:#546E80;--screen:#FFFFFF;--track:#DCEBF6;--blue:#0A6EBD;--blue-d:#07538F;--card:#F1F5F8;--ok:#14764A;--onblue:#fff;--lock:#16324A;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#0A141D;--ink:#EAF3FA;--mute:#9DB6C8;--screen:#102233;--track:#1E3A52;--blue:#4DA3E8;--blue-d:#2F86CC;--card:#17304A;--ok:#4CC38A;--onblue:#06223A;--lock:#0B1824}}
+:root[data-theme="dark"]{--page:#0A141D;--ink:#EAF3FA;--mute:#9DB6C8;--screen:#102233;--track:#1E3A52;--blue:#4DA3E8;--blue-d:#2F86CC;--card:#17304A;--ok:#4CC38A;--onblue:#06223A;--lock:#0B1824}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{max-width:860px;margin:0 auto;padding:28px 20px 4px}
+h1{font-size:22px;margin:0 0 6px;font-weight:800}
+header p{margin:0;color:var(--mute);font-size:15px;line-height:1.5;max-width:60ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{border:1.5px solid var(--track);background:transparent;color:var(--ink);padding:10px 14px;border-radius:999px;font:600 14px inherit;font-family:inherit;cursor:pointer;min-height:44px}
+.chip:focus-visible,.cta:focus-visible,.undo:focus-visible,.act:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.stage{display:flex;flex-wrap:wrap;justify-content:center;gap:32px;padding:24px 16px 48px}
+.col{display:flex;flex-direction:column;align-items:center;gap:12px}
+.cap{font-size:14px;color:var(--mute);font-weight:600}
+.phone{width:340px;height:690px;border-radius:44px;background:var(--screen);border:10px solid #0B1B28;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 40px rgba(8,30,50,.22)}
+.status{display:flex;justify-content:space-between;padding:12px 24px 0;font-size:13px;font-weight:600}
+/* app */
+.app{flex:1;display:flex;flex-direction:column;padding:12px 24px 24px}
+.hello{font-size:18px;font-weight:600;margin:10px 0 0}
+.date{font-size:14px;color:var(--mute);margin:2px 0 0}
+.hero{flex:1;display:grid;place-items:center;position:relative;min-height:0}
+.ring{width:236px;height:236px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:16;stroke-linecap:round}
+.ring .t{stroke:var(--track)}
+.ring .p{stroke:var(--blue);stroke-dasharray:628.3;transition:stroke-dashoffset .4s ease,stroke .3s}
+.done .ring .p{stroke:var(--ok)}
+.num{position:absolute;text-align:center;line-height:1.15}
+.num b{display:block;font-size:50px;font-weight:800;letter-spacing:-1px}
+.num span{display:block;font-size:18px;color:var(--mute)}
+.num em{display:block;font-style:normal;font-size:16px;font-weight:600;color:var(--blue);margin-top:4px}
+.done .num em{color:var(--ok)}
+.msg{text-align:center;font-size:16px;min-height:24px;margin:0 0 10px;font-weight:600}
+.rem{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:14px;padding:12px 14px;font-size:16px;margin-bottom:16px}
+.cta{width:100%;min-height:72px;border:0;border-radius:22px;background:var(--blue);color:var(--onblue);font:800 24px "Plus Jakarta Sans",system-ui,sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:transform .12s,background .2s}
+.cta:active{transform:scale(.95);background:var(--blue-d)}
+.done .cta{background:var(--ok);color:#fff}
+.undo{background:none;border:0;color:var(--mute);font:600 14px inherit;font-family:inherit;text-decoration:underline;min-height:44px;cursor:pointer;visibility:hidden}
+.undo.on{visibility:visible}
+/* lock */
+.lock{background:linear-gradient(170deg,var(--lock),#0A6EBD 160%);color:#fff;border-color:#0B1B28}
+.lock .status{color:#fff}
+.clock{text-align:center;margin-top:36px}
+.clock b{display:block;font-size:68px;font-weight:600;letter-spacing:-2px}
+.clock span{font-size:16px;opacity:.85}
+.notifs{padding:28px 14px;display:flex;flex-direction:column;gap:10px}
+.n{background:rgba(255,255,255,.94);color:#0E2A3F;border-radius:20px;padding:14px;transform:translateY(-12px);opacity:0;animation:in .35s forwards}
+@keyframes in{to{transform:none;opacity:1}}
+.n small{font-size:12px;color:#546E80}
+.n h4{margin:2px 0;font-size:16px}
+.n p{margin:0 0 10px;font-size:15px}
+.act{border:0;background:#0A6EBD;color:#fff;font:700 15px inherit;font-family:inherit;border-radius:12px;padding:0 16px;min-height:44px;cursor:pointer}
+.empty{text-align:center;opacity:.8;font-size:15px;padding:0 24px}
+@media (prefers-reduced-motion:reduce){.ring .p,.cta,.n{transition:none;animation-duration:.01s}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Protótipo: app de hidratação (MVP) · Cristiano Barichello</h1>
+  <p>Toque no botão grande para registrar água. Use “Simular lembrete” para ver a notificação na tela bloqueada e registrar direto por ela.</p>
+  <div class="chips" role="group" aria-label="Estados da tela">
+    <button class="chip" data-s="0">Início do dia</button>
+    <button class="chip" data-s="1250">Em andamento</button>
+    <button class="chip" data-s="1750">Quase lá</button>
+    <button class="chip" data-s="2000">Meta atingida</button>
+    <button class="chip" id="sim">Simular lembrete</button>
+  </div>
+</header>
+
+<main class="stage">
+  <div class="col">
+    <div class="phone" id="app">
+      <div class="status"><span>14:00</span><span>●●● 5G</span></div>
+      <div class="app">
+        <p class="hello" id="hello">Boa tarde, Cristiano</p>
+        <p class="date" id="date">terça-feira, 20 de outubro</p>
+        <div class="hero" role="img" id="heroLabel">
+          <svg class="ring" viewBox="0 0 236 236" aria-hidden="true"><circle class="t" cx="118" cy="118" r="100"/><circle class="p" id="arc" cx="118" cy="118" r="100"/></svg>
+          <div class="num" aria-hidden="true"><b id="cur">0 ml</b><span id="goal">de 2.000 ml</span><em id="pct">0%</em></div>
+        </div>
+        <p class="msg" id="msg" aria-live="polite"></p>
+        <div class="rem"><span aria-hidden="true">🔔</span><span id="next">Próximo lembrete às 16:00</span></div>
+        <button class="cta" id="add" aria-label="Registrar 250 mililitros de água"><span aria-hidden="true">💧</span><span id="ctaT">+ 250 ml</span></button>
+        <button class="undo" id="undo" style="align-self:center">Desfazer</button>
+      </div>
+    </div>
+    <span class="cap">Tela principal</span>
+  </div>
+
+  <div class="col">
+    <div class="phone lock">
+      <div class="status"><span></span><span>●●● 5G</span></div>
+      <div class="clock"><b>14:00</b><span>terça-feira, 20 de outubro</span></div>
+      <div class="notifs" id="notifs"><p class="empty" id="empty">Nenhuma notificação. Toque em “Simular lembrete”.</p></div>
+    </div>
+    <span class="cap">Lembrete na tela bloqueada</span>
+  </div>
+</main>
+
+<script>
+(function(){
+  var GOAL=2000,STEP=250,ml=0,hist=[],timer=null,nextH=16;
+  var $=function(i){return document.getElementById(i)};
+  var arc=$("arc");
+  function fmt(n){return n.toLocaleString("pt-BR")}
+  function msgFor(added){
+    if(ml>=GOAL)return "Meta batida! Parabéns 🎉";
+    if(ml===0)return "Vamos começar? Toque no botão abaixo.";
+    if(GOAL-ml<=500)return "Falta pouco: restam "+fmt(GOAL-ml)+" ml.";
+    return added?"Boa! Mais um copo.":"Hidratação em dia 💧";
+  }
+  function render(added){
+    var p=Math.min(ml/GOAL,1),pc=Math.round(p*100);
+    arc.style.strokeDashoffset=628.3*(1-p);
+    $("cur").textContent=fmt(ml)+" ml";
+    $("pct").textContent=pc+"%";
+    $("msg").textContent=msgFor(added);
+    $("heroLabel").setAttribute("aria-label","Progresso de hoje: "+fmt(ml)+" de "+fmt(GOAL)+" mililitros, "+pc+" por cento");
+    $("app").classList.toggle("done",ml>=GOAL);
+    $("ctaT").textContent=ml>=GOAL?"Meta atingida!":"+ 250 ml";
+    $("next").textContent="Próximo lembrete às "+nextH+":00";
+  }
+  function add(){
+    ml+=STEP;hist.push(STEP);nextH=16;
+    try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}
+    render(true);
+    var u=$("undo");u.classList.add("on");
+    clearTimeout(timer);timer=setTimeout(function(){u.classList.remove("on")},5000);
+    clearNotifs();
+  }
+  function undo(){
+    if(!hist.length)return;
+    ml-=hist.pop();render(false);$("undo").classList.remove("on");
+  }
+  function clearNotifs(){
+    $("notifs").innerHTML='<p class="empty">Registrado. Nenhuma notificação.</p>';
+  }
+  function notify(){
+    var t,b;
+    if(ml>0&&GOAL-ml<=500&&ml<GOAL){t="Quase lá!";b="Faltam só "+fmt(GOAL-ml)+" ml."}
+    else if(ml===0){t="Sua água está esperando";b="Que tal um copo agora?"}
+    else{t="Hora de beber água 💧";b="Um gole agora faz diferença."}
+    var box=$("notifs");
+    box.innerHTML='<div class="n"><small>Hidrata · agora</small><h4>'+t+'</h4><p>'+b+'</p><button class="act" id="nAct">Bebi 250 ml</button></div>';
+    $("nAct").addEventListener("click",add);
+  }
+  $("add").addEventListener("click",add);
+  $("undo").addEventListener("click",undo);
+  $("sim").addEventListener("click",notify);
+  document.querySelectorAll("[data-s]").forEach(function(c){
+    c.addEventListener("click",function(){ml=+c.dataset.s;hist=[];$("undo").classList.remove("on");render(false)});
+  });
+  $("date").textContent=new Date(2026,9,20).toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"});
+  render(false);
+})();
+</script>
+</body>
+</html>
