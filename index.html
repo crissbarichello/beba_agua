@@ -1,166 +1,873 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Protótipo: app de hidratação</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap">
-<style>
-:root{--page:#EEF3F7;--ink:#0E2A3F;--mute:#546E80;--screen:#FFFFFF;--track:#DCEBF6;--blue:#0A6EBD;--blue-d:#07538F;--card:#F1F5F8;--ok:#14764A;--onblue:#fff;--lock:#16324A;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#0A141D;--ink:#EAF3FA;--mute:#9DB6C8;--screen:#102233;--track:#1E3A52;--blue:#4DA3E8;--blue-d:#2F86CC;--card:#17304A;--ok:#4CC38A;--onblue:#06223A;--lock:#0B1824}}
-:root[data-theme="dark"]{--page:#0A141D;--ink:#EAF3FA;--mute:#9DB6C8;--screen:#102233;--track:#1E3A52;--blue:#4DA3E8;--blue-d:#2F86CC;--card:#17304A;--ok:#4CC38A;--onblue:#06223A;--lock:#0B1824}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--page);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-header{max-width:860px;margin:0 auto;padding:28px 20px 4px}
-h1{font-size:22px;margin:0 0 6px;font-weight:800}
-header p{margin:0;color:var(--mute);font-size:15px;line-height:1.5;max-width:60ch}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.chip{border:1.5px solid var(--track);background:transparent;color:var(--ink);padding:10px 14px;border-radius:999px;font:600 14px inherit;font-family:inherit;cursor:pointer;min-height:44px}
-.chip:focus-visible,.cta:focus-visible,.undo:focus-visible,.act:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
-.stage{display:flex;flex-wrap:wrap;justify-content:center;gap:32px;padding:24px 16px 48px}
-.col{display:flex;flex-direction:column;align-items:center;gap:12px}
-.cap{font-size:14px;color:var(--mute);font-weight:600}
-.phone{width:340px;height:690px;border-radius:44px;background:var(--screen);border:10px solid #0B1B28;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 40px rgba(8,30,50,.22)}
-.status{display:flex;justify-content:space-between;padding:12px 24px 0;font-size:13px;font-weight:600}
-/* app */
-.app{flex:1;display:flex;flex-direction:column;padding:12px 24px 24px}
-.hello{font-size:18px;font-weight:600;margin:10px 0 0}
-.date{font-size:14px;color:var(--mute);margin:2px 0 0}
-.hero{flex:1;display:grid;place-items:center;position:relative;min-height:0}
-.ring{width:236px;height:236px;transform:rotate(-90deg)}
-.ring circle{fill:none;stroke-width:16;stroke-linecap:round}
-.ring .t{stroke:var(--track)}
-.ring .p{stroke:var(--blue);stroke-dasharray:628.3;transition:stroke-dashoffset .4s ease,stroke .3s}
-.done .ring .p{stroke:var(--ok)}
-.num{position:absolute;text-align:center;line-height:1.15}
-.num b{display:block;font-size:50px;font-weight:800;letter-spacing:-1px}
-.num span{display:block;font-size:18px;color:var(--mute)}
-.num em{display:block;font-style:normal;font-size:16px;font-weight:600;color:var(--blue);margin-top:4px}
-.done .num em{color:var(--ok)}
-.msg{text-align:center;font-size:16px;min-height:24px;margin:0 0 10px;font-weight:600}
-.rem{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:14px;padding:12px 14px;font-size:16px;margin-bottom:16px}
-.cta{width:100%;min-height:72px;border:0;border-radius:22px;background:var(--blue);color:var(--onblue);font:800 24px "Plus Jakarta Sans",system-ui,sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:transform .12s,background .2s}
-.cta:active{transform:scale(.95);background:var(--blue-d)}
-.done .cta{background:var(--ok);color:#fff}
-.undo{background:none;border:0;color:var(--mute);font:600 14px inherit;font-family:inherit;text-decoration:underline;min-height:44px;cursor:pointer;visibility:hidden}
-.undo.on{visibility:visible}
-/* lock */
-.lock{background:linear-gradient(170deg,var(--lock),#0A6EBD 160%);color:#fff;border-color:#0B1B28}
-.lock .status{color:#fff}
-.clock{text-align:center;margin-top:36px}
-.clock b{display:block;font-size:68px;font-weight:600;letter-spacing:-2px}
-.clock span{font-size:16px;opacity:.85}
-.notifs{padding:28px 14px;display:flex;flex-direction:column;gap:10px}
-.n{background:rgba(255,255,255,.94);color:#0E2A3F;border-radius:20px;padding:14px;transform:translateY(-12px);opacity:0;animation:in .35s forwards}
-@keyframes in{to{transform:none;opacity:1}}
-.n small{font-size:12px;color:#546E80}
-.n h4{margin:2px 0;font-size:16px}
-.n p{margin:0 0 10px;font-size:15px}
-.act{border:0;background:#0A6EBD;color:#fff;font:700 15px inherit;font-family:inherit;border-radius:12px;padding:0 16px;min-height:44px;cursor:pointer}
-.empty{text-align:center;opacity:.8;font-size:15px;padding:0 24px}
-@media (prefers-reduced-motion:reduce){.ring .p,.cta,.n{transition:none;animation-duration:.01s}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Protótipo: app de hidratação</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap">
+  <style>
+    :root {
+      --page: #EEF3F7;
+      --ink: #0E2A3F;
+      --mute: #546E80;
+      --screen: #FFFFFF;
+      --track: #DCEBF6;
+      --blue: #0A6EBD;
+      --blue-d: #07538F;
+      --card: #F1F5F8;
+      --ok: #14764A;
+      --onblue: #fff;
+      --lock: #16324A;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px)
+    }
+
+    @media (prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) {
+        --page: #0A141D;
+        --ink: #EAF3FA;
+        --mute: #9DB6C8;
+        --screen: #102233;
+        --track: #1E3A52;
+        --blue: #4DA3E8;
+        --blue-d: #2F86CC;
+        --card: #17304A;
+        --ok: #4CC38A;
+        --onblue: #06223A;
+        --lock: #0B1824
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --page: #0A141D;
+      --ink: #EAF3FA;
+      --mute: #9DB6C8;
+      --screen: #102233;
+      --track: #1E3A52;
+      --blue: #4DA3E8;
+      --blue-d: #2F86CC;
+      --card: #17304A;
+      --ok: #4CC38A;
+      --onblue: #06223A;
+      --lock: #0B1824
+    }
+
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px)
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif
+    }
+
+    header {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 28px 20px 4px
+    }
+
+    h1 {
+      font-size: 22px;
+      margin: 0 0 6px;
+      font-weight: 800
+    }
+
+    header p {
+      margin: 0;
+      color: var(--mute);
+      font-size: 15px;
+      line-height: 1.5;
+      max-width: 60ch
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px
+    }
+
+    .chip {
+      border: 1.5px solid var(--track);
+      background: transparent;
+      color: var(--ink);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font: 600 14px inherit;
+      font-family: inherit;
+      cursor: pointer;
+      min-height: 44px
+    }
+
+    .chip:focus-visible,
+    .cta:focus-visible,
+    .undo:focus-visible,
+    .act:focus-visible {
+      outline: 3px solid var(--blue);
+      outline-offset: 2px
+    }
+
+    .stage {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+      padding: 24px 16px 48px
+    }
+
+    .col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px
+    }
+
+    .cap {
+      font-size: 14px;
+      color: var(--mute);
+      font-weight: 600
+    }
+
+    .phone {
+      width: 340px;
+      height: 690px;
+      border-radius: 44px;
+      background: var(--screen);
+      border: 10px solid #0B1B28;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 18px 40px rgba(8, 30, 50, .22)
+    }
+
+    .status {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 24px 0;
+      font-size: 13px;
+      font-weight: 600
+    }
+
+    /* app */
+    .app {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 24px 24px
+    }
+
+    .hello {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 10px 0 0
+    }
+
+    .date {
+      font-size: 14px;
+      color: var(--mute);
+      margin: 2px 0 0
+    }
+
+    .hero {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      position: relative;
+      min-height: 0
+    }
+
+    .ring {
+      width: 236px;
+      height: 236px;
+      transform: rotate(-90deg)
+    }
+
+    .ring circle {
+      fill: none;
+      stroke-width: 16;
+      stroke-linecap: round
+    }
+
+    .ring .t {
+      stroke: var(--track)
+    }
+
+    .ring .p {
+      stroke: var(--blue);
+      stroke-dasharray: 628.3;
+      transition: stroke-dashoffset .4s ease, stroke .3s
+    }
+
+    .done .ring .p {
+      stroke: var(--ok)
+    }
+
+    .num {
+      position: absolute;
+      text-align: center;
+      line-height: 1.15
+    }
+
+    .num b {
+      display: block;
+      font-size: 50px;
+      font-weight: 800;
+      letter-spacing: -1px
+    }
+
+    .num span {
+      display: block;
+      font-size: 18px;
+      color: var(--mute)
+    }
+
+    .num em {
+      display: block;
+      font-style: normal;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--blue);
+      margin-top: 4px
+    }
+
+    .done .num em {
+      color: var(--ok)
+    }
+
+    .msg {
+      text-align: center;
+      font-size: 16px;
+      min-height: 24px;
+      margin: 0 0 10px;
+      font-weight: 600
+    }
+
+    .rem {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 16px;
+      margin-bottom: 16px
+    }
+
+    .cta {
+      width: 100%;
+      min-height: 72px;
+      border: 0;
+      border-radius: 22px;
+      background: var(--blue);
+      color: var(--onblue);
+      font: 800 24px "Plus Jakarta Sans", system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: transform .12s, background .2s
+    }
+
+    .cta:active {
+      transform: scale(.95);
+      background: var(--blue-d)
+    }
+
+    .done .cta {
+      background: var(--ok);
+      color: #fff
+    }
+
+    .undo {
+      background: none;
+      border: 0;
+      color: var(--mute);
+      font: 600 14px inherit;
+      font-family: inherit;
+      text-decoration: underline;
+      min-height: 44px;
+      cursor: pointer;
+      visibility: hidden
+    }
+
+    .undo.on {
+      visibility: visible
+    }
+
+    /* lock */
+    .lock {
+      background: linear-gradient(170deg, var(--lock), #0A6EBD 160%);
+      color: #fff;
+      border-color: #0B1B28
+    }
+
+    .lock .status {
+      color: #fff
+    }
+
+    .clock {
+      text-align: center;
+      margin-top: 36px
+    }
+
+    .clock b {
+      display: block;
+      font-size: 68px;
+      font-weight: 600;
+      letter-spacing: -2px
+    }
+
+    .clock span {
+      font-size: 16px;
+      opacity: .85
+    }
+
+    .notifs {
+      padding: 28px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .n {
+      background: rgba(255, 255, 255, .94);
+      color: #0E2A3F;
+      border-radius: 20px;
+      padding: 14px;
+      transform: translateY(-12px);
+      opacity: 0;
+      animation: in .35s forwards
+    }
+
+    @keyframes in {
+      to {
+        transform: none;
+        opacity: 1
+      }
+    }
+
+    .n small {
+      font-size: 12px;
+      color: #546E80
+    }
+
+    .n h4 {
+      margin: 2px 0;
+      font-size: 16px
+    }
+
+    .n p {
+      margin: 0 0 10px;
+      font-size: 15px
+    }
+
+    .act {
+      border: 0;
+      background: #0A6EBD;
+      color: #fff;
+      font: 700 15px inherit;
+      font-family: inherit;
+      border-radius: 12px;
+      padding: 0 16px;
+      min-height: 44px;
+      cursor: pointer
+    }
+
+    .empty {
+      text-align: center;
+      opacity: .8;
+      font-size: 15px;
+      padding: 0 24px
+    }
+
+    .history-card {
+      width: 340px;
+      height: 690px;
+      background: linear-gradient(180deg, #102B3E 0%, #0D2340 100%);
+      border: 10px solid #0B1B28;
+      border-radius: 44px;
+      padding: 18px 16px 14px;
+      box-shadow: 0 18px 40px rgba(8, 30, 50, .22);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      color: #EAF3FA
+    }
+
+    .history-card .badge {
+      background: rgba(255, 255, 255, 0.14);
+      color: #EAF3FA;
+      border: 1px solid rgba(255, 255, 255, 0.12)
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-shrink: 0
+    }
+
+    .eyebrow {
+      display: block;
+      font-size: 11px;
+      color: rgba(234, 243, 250, 0.75);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 700
+    }
+
+    .history-header h2 {
+      margin: 4px 0 0;
+      font-size: 22px;
+      line-height: 1.2;
+      color: #F4F9FF
+    }
+
+    .badge {
+      min-width: 90px;
+      text-align: center;
+      border-radius: 999px;
+      background: rgba(10, 110, 189, 0.12);
+      color: var(--blue);
+      padding: 8px 10px;
+      font-weight: 800;
+      font-size: 13px
+    }
+
+    .history-totals {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-shrink: 0
+    }
+
+    .history-totals > div {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #0E2A3F
+    }
+
+    .history-totals strong {
+      font-size: 18px
+    }
+
+    .history-totals small {
+      color: #587389;
+      font-size: 12px
+    }
+
+    .history-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      min-height: 0;
+      padding-right: 4px
+    }
+
+    .history-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08)
+    }
+
+    .history-list li span {
+      color: rgba(234, 243, 250, 0.8);
+      font-size: 13px
+    }
+
+    .history-list li strong {
+      font-size: 14px;
+      color: #F3F9FF
+    }
+
+    .history-empty {
+      color: rgba(234, 243, 250, 0.8);
+      padding: 12px 8px;
+      font-size: 14px;
+      text-align: center
+    }
+
+    .history-week {
+      margin-top: 18px;
+      flex-shrink: 0
+    }
+
+    .history-week h3 {
+      margin: 0 0 12px;
+      font-size: 16px
+    }
+
+    .history-summary {
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .day-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px
+    }
+
+    .day-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--mute)
+    }
+
+    .bar {
+      width: 100%;
+      height: 10px;
+      background: #E8F0F6;
+      border-radius: 999px;
+      overflow: hidden
+    }
+
+    .bar i {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), #5EB7FF)
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+
+      .ring .p,
+      .cta,
+      .n {
+        transition: none;
+        animation-duration: .01s
+      }
+    }
+  </style>
 </head>
+
 <body>
-<header>
-  <h1>Protótipo: app de hidratação (MVP) · Cristiano Barichello</h1>
-  <p>Toque no botão grande para registrar água. Use “Simular lembrete” para ver a notificação na tela bloqueada e registrar direto por ela.</p>
-  <div class="chips" role="group" aria-label="Estados da tela">
-    <button class="chip" data-s="0">Início do dia</button>
-    <button class="chip" data-s="1250">Em andamento</button>
-    <button class="chip" data-s="1750">Quase lá</button>
-    <button class="chip" data-s="2000">Meta atingida</button>
-    <button class="chip" id="sim">Simular lembrete</button>
-  </div>
-</header>
+  <header>
+    <h1>Protótipo: app de hidratação (MVP) · Cristiano Barichello</h1>
+    <p>Toque no botão grande para registrar água. Use “Simular lembrete” para ver a notificação na tela bloqueada e
+      registrar direto por ela.</p>
+    <div class="chips" role="group" aria-label="Estados da tela">
+      <button class="chip" data-s="0">Início do dia</button>
+      <button class="chip" data-s="1250">Em andamento</button>
+      <button class="chip" data-s="1750">Quase lá</button>
+      <button class="chip" data-s="2000">Meta atingida</button>
+      <button class="chip" id="sim">Simular lembrete</button>
+    </div>
+  </header>
 
-<main class="stage">
-  <div class="col">
-    <div class="phone" id="app">
-      <div class="status"><span>14:00</span><span>●●● 5G</span></div>
-      <div class="app">
-        <p class="hello" id="hello">Boa tarde, Cristiano</p>
-        <p class="date" id="date">terça-feira, 20 de outubro</p>
-        <div class="hero" role="img" id="heroLabel">
-          <svg class="ring" viewBox="0 0 236 236" aria-hidden="true"><circle class="t" cx="118" cy="118" r="100"/><circle class="p" id="arc" cx="118" cy="118" r="100"/></svg>
-          <div class="num" aria-hidden="true"><b id="cur">0 ml</b><span id="goal">de 2.000 ml</span><em id="pct">0%</em></div>
+  <main class="stage">
+    <div class="col">
+      <div class="phone" id="app">
+        <div class="status"><span id="timeLabel">14:00</span><span>●●● 5G</span></div>
+        <div class="app">
+          <p class="hello" id="hello">Boa tarde, Cristiano</p>
+          <p class="date" id="date">terça-feira, 20 de outubro</p>
+          <div class="hero" role="img" id="heroLabel">
+            <svg class="ring" viewBox="0 0 236 236" aria-hidden="true">
+              <circle class="t" cx="118" cy="118" r="100" />
+              <circle class="p" id="arc" cx="118" cy="118" r="100" />
+            </svg>
+            <div class="num" aria-hidden="true"><b id="cur">0 ml</b><span id="goal">de 2.000 ml</span><em
+                id="pct">0%</em></div>
+          </div>
+          <p class="msg" id="msg" aria-live="polite"></p>
+          <div class="rem"><span aria-hidden="true">🔔</span><span id="next">Próximo lembrete às 16:00</span></div>
+          <button class="cta" id="add" aria-label="Registrar 250 mililitros de água"><span
+              aria-hidden="true">💧</span><span id="ctaT">+ 250 ml</span></button>
+          <button class="undo" id="undo" style="align-self:center">Desfazer</button>
         </div>
-        <p class="msg" id="msg" aria-live="polite"></p>
-        <div class="rem"><span aria-hidden="true">🔔</span><span id="next">Próximo lembrete às 16:00</span></div>
-        <button class="cta" id="add" aria-label="Registrar 250 mililitros de água"><span aria-hidden="true">💧</span><span id="ctaT">+ 250 ml</span></button>
-        <button class="undo" id="undo" style="align-self:center">Desfazer</button>
       </div>
+      <span class="cap">Tela principal</span>
     </div>
-    <span class="cap">Tela principal</span>
-  </div>
 
-  <div class="col">
-    <div class="phone lock">
-      <div class="status"><span></span><span>●●● 5G</span></div>
-      <div class="clock"><b>14:00</b><span>terça-feira, 20 de outubro</span></div>
-      <div class="notifs" id="notifs"><p class="empty" id="empty">Nenhuma notificação. Toque em “Simular lembrete”.</p></div>
+    <div class="col">
+      <div class="history-card" aria-live="polite">
+        <div class="history-header">
+          <div>
+            <span class="eyebrow">Histórico diário</span>
+            <h2>Consumo de hoje</h2>
+          </div>
+          <div class="badge" id="dailyBadge">0 ml</div>
+        </div>
+
+        <div class="history-totals">
+          <div>
+            <strong id="historyTotal">0 ml</strong>
+            <small>registrados</small>
+          </div>
+          <div>
+            <strong id="historyGoalPercent">0%</strong>
+            <small>da meta</small>
+          </div>
+        </div>
+
+        <ul class="history-list" id="historyList"></ul>
+
+        <div class="history-week">
+          <h3>Últimos 7 dias</h3>
+          <div class="history-summary" id="historySummary"></div>
+        </div>
+      </div>
+      <span class="cap">Histórico de uso</span>
     </div>
-    <span class="cap">Lembrete na tela bloqueada</span>
-  </div>
-</main>
 
-<script>
-(function(){
-  var GOAL=2000,STEP=250,ml=0,hist=[],timer=null,nextH=16;
-  var $=function(i){return document.getElementById(i)};
-  var arc=$("arc");
-  function fmt(n){return n.toLocaleString("pt-BR")}
-  function msgFor(added){
-    if(ml>=GOAL)return "Meta batida! Parabéns 🎉";
-    if(ml===0)return "Vamos começar? Toque no botão abaixo.";
-    if(GOAL-ml<=500)return "Falta pouco: restam "+fmt(GOAL-ml)+" ml.";
-    return added?"Boa! Mais um copo.":"Hidratação em dia 💧";
-  }
-  function render(added){
-    var p=Math.min(ml/GOAL,1),pc=Math.round(p*100);
-    arc.style.strokeDashoffset=628.3*(1-p);
-    $("cur").textContent=fmt(ml)+" ml";
-    $("pct").textContent=pc+"%";
-    $("msg").textContent=msgFor(added);
-    $("heroLabel").setAttribute("aria-label","Progresso de hoje: "+fmt(ml)+" de "+fmt(GOAL)+" mililitros, "+pc+" por cento");
-    $("app").classList.toggle("done",ml>=GOAL);
-    $("ctaT").textContent=ml>=GOAL?"Meta atingida!":"+ 250 ml";
-    $("next").textContent="Próximo lembrete às "+nextH+":00";
-  }
-  function add(){
-    ml+=STEP;hist.push(STEP);nextH=16;
-    try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}
-    render(true);
-    var u=$("undo");u.classList.add("on");
-    clearTimeout(timer);timer=setTimeout(function(){u.classList.remove("on")},5000);
-    clearNotifs();
-  }
-  function undo(){
-    if(!hist.length)return;
-    ml-=hist.pop();render(false);$("undo").classList.remove("on");
-  }
-  function clearNotifs(){
-    $("notifs").innerHTML='<p class="empty">Registrado. Nenhuma notificação.</p>';
-  }
-  function notify(){
-    var t,b;
-    if(ml>0&&GOAL-ml<=500&&ml<GOAL){t="Quase lá!";b="Faltam só "+fmt(GOAL-ml)+" ml."}
-    else if(ml===0){t="Sua água está esperando";b="Que tal um copo agora?"}
-    else{t="Hora de beber água 💧";b="Um gole agora faz diferença."}
-    var box=$("notifs");
-    box.innerHTML='<div class="n"><small>Hidrata · agora</small><h4>'+t+'</h4><p>'+b+'</p><button class="act" id="nAct">Bebi 250 ml</button></div>';
-    $("nAct").addEventListener("click",add);
-  }
-  $("add").addEventListener("click",add);
-  $("undo").addEventListener("click",undo);
-  $("sim").addEventListener("click",notify);
-  document.querySelectorAll("[data-s]").forEach(function(c){
-    c.addEventListener("click",function(){ml=+c.dataset.s;hist=[];$("undo").classList.remove("on");render(false)});
-  });
-  $("date").textContent=new Date(2026,9,20).toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"});
-  render(false);
-})();
-</script>
+    <div class="col">
+      <div class="phone lock">
+        <div class="status"><span></span><span>●●● 5G</span></div>
+        <div class="clock"><b id="lockTime">14:00</b><span id="lockDate">terça-feira, 20 de outubro</span></div>
+        <div class="notifs" id="notifs">
+          <p class="empty" id="empty">Nenhuma notificação. Toque em “Simular lembrete”.</p>
+        </div>
+      </div>
+      <span class="cap">Lembrete na tela bloqueada</span>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var GOAL = 2000, STEP = 250, ml = 0, hist = [], timer = null, nextH = 16;
+      var history = loadHistory();
+      var todayKey = getDateKey(new Date());
+      var $ = function (i) { return document.getElementById(i) };
+      var arc = $("arc");
+
+      function getDateKey(date) {
+        var d = new Date(date);
+        var y = d.getFullYear();
+        var m = String(d.getMonth() + 1).padStart(2, '0');
+        var day = String(d.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + day;
+      }
+
+      function fmt(n) { return Number(n || 0).toLocaleString("pt-BR") }
+
+      function buildSeedHistory() {
+        var seeded = {};
+        var today = new Date();
+        for (var i = 0; i < 7; i++) {
+          var d = new Date(today);
+          d.setDate(today.getDate() - i);
+          var key = getDateKey(d);
+          var total = 0;
+          if (i === 0) total = 0;
+          else if (i === 1) total = 1000;
+          else if (i === 2) total = 1750;
+          else if (i === 3) total = 1250;
+          else if (i === 4) total = 2000;
+          else if (i === 5) total = 750;
+          else total = 1500;
+
+          var entries = [];
+          var left = total;
+          while (left > 0) {
+            var piece = Math.min(STEP, left);
+            entries.push({ amount: piece, when: new Date(d.getFullYear(), d.getMonth(), d.getDate(), 8 + entries.length * 2, 20 + entries.length * 18).toISOString() });
+            left -= piece;
+          }
+          seeded[key] = entries;
+        }
+        return seeded;
+      }
+
+      function loadHistory() {
+        try {
+          var saved = JSON.parse(localStorage.getItem('bebaAguaHistory') || 'null');
+          if (saved && typeof saved === 'object') return saved;
+        } catch (e) { }
+        var seeded = buildSeedHistory();
+        localStorage.setItem('bebaAguaHistory', JSON.stringify(seeded));
+        return seeded;
+      }
+
+      function saveHistory() {
+        localStorage.setItem('bebaAguaHistory', JSON.stringify(history));
+      }
+
+      function getEntriesForToday() {
+        if (!history[todayKey]) history[todayKey] = [];
+        return history[todayKey];
+      }
+
+      function totalForEntries(entries) {
+        return (entries || []).reduce(function (sum, entry) {
+          return sum + Number(entry.amount || 0);
+        }, 0);
+      }
+
+      function setCurrentMl() {
+        ml = totalForEntries(getEntriesForToday());
+      }
+
+      function msgFor(added) {
+        if (ml >= GOAL) return "Meta batida! Parabéns 🎉";
+        if (ml === 0) return "Vamos começar? Toque no botão abaixo.";
+        if (GOAL - ml <= 500) return "Falta pouco: restam " + fmt(GOAL - ml) + " ml.";
+        return added ? "Boa! Mais um copo." : "Hidratação em dia 💧";
+      }
+
+      function renderHistory() {
+        var entries = getEntriesForToday();
+        var totalToday = totalForEntries(entries);
+        var pct = Math.round(Math.min(totalToday / GOAL, 1) * 100);
+
+        $("dailyBadge").textContent = fmt(totalToday) + " ml";
+        $("historyTotal").textContent = fmt(totalToday) + " ml";
+        $("historyGoalPercent").textContent = pct + "%";
+
+        if (!entries.length) {
+          $("historyList").innerHTML = '<li class="history-empty">Ainda não houve registro hoje.</li>';
+        } else {
+          var markup = entries.slice().reverse().map(function (entry) {
+            var when = new Date(entry.when);
+            return '<li><span>' + when.toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' }) + '</span><strong>+' + fmt(entry.amount) + ' ml</strong></li>';
+          }).join('');
+          $("historyList").innerHTML = markup;
+        }
+
+        var summary = [];
+        for (var i = 6; i >= 0; i--) {
+          var day = new Date();
+          day.setDate(day.getDate() - i);
+          var key = getDateKey(day);
+          var total = totalForEntries(history[key] || []);
+          var label = day.toLocaleDateString("pt-BR", { weekday: "short" }).replace('.', '');
+          summary.push({
+            key: key,
+            label: label,
+            total: total,
+            fill: Math.min(100, Math.round((total / GOAL) * 100))
+          });
+        }
+
+        $("historySummary").innerHTML = summary.map(function (day) {
+          return '<div class="day-row"><div class="day-meta"><span>' + day.label + '</span><strong>' + fmt(day.total) + ' ml</strong></div><div class="bar"><i style="width:' + day.fill + '%"></i></div></div>';
+        }).join('');
+      }
+
+      function render(added) {
+        var p = Math.min(ml / GOAL, 1), pc = Math.round(p * 100);
+        arc.style.strokeDashoffset = 628.3 * (1 - p);
+        $("cur").textContent = fmt(ml) + " ml";
+        $("pct").textContent = pc + "%";
+        $("msg").textContent = msgFor(added);
+        $("heroLabel").setAttribute("aria-label", "Progresso de hoje: " + fmt(ml) + " de " + fmt(GOAL) + " mililitros, " + pc + " por cento");
+        $("app").classList.toggle("done", ml >= GOAL);
+        $("ctaT").textContent = ml >= GOAL ? "Meta atingida!" : "+ 250 ml";
+        $("next").textContent = "Próximo lembrete às " + nextH + ":00";
+        $("timeLabel").textContent = new Date().toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit', hour12: false });
+        $("lockTime").textContent = $("timeLabel").textContent;
+      }
+
+      function updateDateLabels() {
+        var now = new Date();
+        var dateText = now.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
+        $("date").textContent = dateText;
+        $("lockDate").textContent = dateText;
+        $("hello").textContent = now.getHours() < 12 ? "Bom dia, Cristiano" : now.getHours() < 18 ? "Boa tarde, Cristiano" : "Boa noite, Cristiano";
+      }
+
+      function add() {
+        var entry = { amount: STEP, when: new Date().toISOString() };
+        if (!history[todayKey]) history[todayKey] = [];
+        history[todayKey].push(entry);
+        setCurrentMl();
+        nextH = 16;
+        saveHistory();
+        try { navigator.vibrate && navigator.vibrate(30) } catch (e) { }
+        renderHistory();
+        render(true);
+        var u = $("undo"); u.classList.add("on");
+        clearTimeout(timer); timer = setTimeout(function () { u.classList.remove("on") }, 5000);
+        clearNotifs();
+      }
+
+      function undo() {
+        var entries = getEntriesForToday();
+        if (!entries.length) return;
+        entries.pop();
+        setCurrentMl();
+        saveHistory();
+        renderHistory();
+        render(false);
+        $("undo").classList.remove("on");
+      }
+
+      function clearNotifs() {
+        $("notifs").innerHTML = '<p class="empty">Registrado. Nenhuma notificação.</p>';
+      }
+
+      function notify() {
+        var t, b;
+        if (ml > 0 && GOAL - ml <= 500 && ml < GOAL) { t = "Quase lá!"; b = "Faltam só " + fmt(GOAL - ml) + " ml." }
+        else if (ml === 0) { t = "Sua água está esperando"; b = "Que tal um copo agora?" }
+        else { t = "Hora de beber água 💧"; b = "Um gole agora faz diferença." }
+        var box = $("notifs");
+        box.innerHTML = '<div class="n"><small>Hidrata · agora</small><h4>' + t + '</h4><p>' + b + '</p><button class="act" id="nAct">Bebi 250 ml</button></div>';
+        $("nAct").addEventListener("click", add);
+      }
+
+      $("add").addEventListener("click", add);
+      $("undo").addEventListener("click", undo);
+      $("sim").addEventListener("click", notify);
+
+      document.querySelectorAll("[data-s]").forEach(function (c) {
+        c.addEventListener("click", function () {
+          var value = +c.dataset.s;
+          history[todayKey] = [];
+          if (value > 0) {
+            var total = value;
+            while (total > 0) {
+              history[todayKey].push({ amount: Math.min(STEP, total), when: new Date().toISOString() });
+              total -= STEP;
+            }
+          }
+          setCurrentMl();
+          saveHistory();
+          renderHistory();
+          render(false);
+          $("undo").classList.remove("on");
+        });
+      });
+
+      updateDateLabels();
+      setCurrentMl();
+      renderHistory();
+      render(false);
+    })();
+  </script>
 </body>
+
 </html>
