@@ -9,50 +9,22 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap">
   <style>
     :root {
-      --page: #EEF3F7;
-      --ink: #0E2A3F;
-      --mute: #546E80;
-      --screen: #FFFFFF;
-      --track: #DCEBF6;
-      --blue: #0A6EBD;
-      --blue-d: #07538F;
-      --card: #F1F5F8;
-      --ok: #14764A;
-      --onblue: #fff;
-      --lock: #16324A;
+      --page: #060B1A;
+      --ink: #E0FBFC;
+      --mute: #A8B9CC;
+      --screen: #0B132B;
+      --track: #1C2541;
+      --line: #3A506B;
+      --blue: #48CAE4;
+      --blue-d: #2FA9C8;
+      --card: #1C2541;
+      --ok: #4CC38A;
+      --onblue: #0B132B;
+      --lock: #0B132B;
+      color-scheme: dark;
       box-sizing: border-box;
       padding-top: env(safe-area-inset-top, 0px);
       padding-bottom: env(safe-area-inset-bottom, 0px)
-    }
-
-    @media (prefers-color-scheme:dark) {
-      :root:not([data-theme="light"]) {
-        --page: #0A141D;
-        --ink: #EAF3FA;
-        --mute: #9DB6C8;
-        --screen: #102233;
-        --track: #1E3A52;
-        --blue: #4DA3E8;
-        --blue-d: #2F86CC;
-        --card: #17304A;
-        --ok: #4CC38A;
-        --onblue: #06223A;
-        --lock: #0B1824
-      }
-    }
-
-    :root[data-theme="dark"] {
-      --page: #0A141D;
-      --ink: #EAF3FA;
-      --mute: #9DB6C8;
-      --screen: #102233;
-      --track: #1E3A52;
-      --blue: #4DA3E8;
-      --blue-d: #2F86CC;
-      --card: #17304A;
-      --ok: #4CC38A;
-      --onblue: #06223A;
-      --lock: #0B1824
     }
 
     html {
@@ -98,13 +70,14 @@
     }
 
     .chip {
-      border: 1.5px solid var(--track);
+      border: 1.5px solid var(--line);
       background: transparent;
       color: var(--ink);
       padding: 10px 14px;
       border-radius: 999px;
-      font: 600 14px inherit;
       font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
       min-height: 44px
     }
@@ -143,12 +116,12 @@
       height: 690px;
       border-radius: 44px;
       background: var(--screen);
-      border: 10px solid #0B1B28;
+      border: 10px solid #1C2541;
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 18px 40px rgba(8, 30, 50, .22)
+      box-shadow: 0 18px 40px rgba(0, 0, 0, .45), 0 0 0 1px #3A506B
     }
 
     .status {
@@ -287,15 +260,16 @@
 
     .done .cta {
       background: var(--ok);
-      color: #fff
+      color: var(--onblue)
     }
 
     .undo {
       background: none;
       border: 0;
       color: var(--mute);
-      font: 600 14px inherit;
       font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
       text-decoration: underline;
       min-height: 44px;
       cursor: pointer;
@@ -308,9 +282,9 @@
 
     /* lock */
     .lock {
-      background: linear-gradient(170deg, var(--lock), #0A6EBD 160%);
+      background: linear-gradient(170deg, #0B132B, #3A506B 170%);
       color: #fff;
-      border-color: #0B1B28
+      border-color: #1C2541
     }
 
     .lock .status {
@@ -375,10 +349,11 @@
 
     .act {
       border: 0;
-      background: #0A6EBD;
-      color: #fff;
-      font: 700 15px inherit;
+      background: var(--blue);
+      color: #0B132B;
       font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
       border-radius: 12px;
       padding: 0 16px;
       min-height: 44px;
@@ -395,11 +370,11 @@
     .history-card {
       width: 340px;
       height: 690px;
-      background: linear-gradient(180deg, #102B3E 0%, #0D2340 100%);
-      border: 10px solid #0B1B28;
+      background: var(--screen);
+      border: 10px solid #1C2541;
       border-radius: 44px;
       padding: 18px 16px 14px;
-      box-shadow: 0 18px 40px rgba(8, 30, 50, .22);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, .45), 0 0 0 1px #3A506B;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -457,14 +432,14 @@
     }
 
     .history-totals > div {
-      background: rgba(255, 255, 255, 0.9);
+      background: var(--card);
       border-radius: 16px;
       padding: 12px 10px;
       display: flex;
       flex-direction: column;
       gap: 2px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      color: #0E2A3F
+      border: 1px solid var(--line);
+      color: var(--ink)
     }
 
     .history-totals strong {
@@ -472,7 +447,7 @@
     }
 
     .history-totals small {
-      color: #587389;
+      color: var(--mute);
       font-size: 12px
     }
 
@@ -494,10 +469,10 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--card);
       border-radius: 12px;
       padding: 10px 12px;
-      border: 1px solid rgba(255, 255, 255, 0.08)
+      border: 1px solid var(--line)
     }
 
     .history-list li span {
@@ -544,13 +519,17 @@
       justify-content: space-between;
       gap: 10px;
       font-size: 12px;
-      color: var(--mute)
+      color: rgba(234, 243, 250, 0.85)
+    }
+
+    .day-meta strong {
+      color: #F3F9FF
     }
 
     .bar {
       width: 100%;
       height: 10px;
-      background: #E8F0F6;
+      background: rgba(255, 255, 255, 0.16);
       border-radius: 999px;
       overflow: hidden
     }
@@ -559,7 +538,146 @@
       display: block;
       height: 100%;
       border-radius: inherit;
-      background: linear-gradient(90deg, var(--blue), #5EB7FF)
+      background: linear-gradient(90deg, var(--blue), #90E0EF)
+    }
+
+    .ob {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 24px 20px;
+      gap: 6px;
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-width: thin
+    }
+
+    .ob > * {
+      min-width: 0;
+      max-width: 100%
+    }
+
+    .ob h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 6px 0 8px
+    }
+
+    .ob label {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 6px
+    }
+
+    .ob input[type=text] {
+      min-height: 52px;
+      border-radius: 14px;
+      border: 1.5px solid var(--line);
+      background: var(--card);
+      color: #fff;
+      font-family: inherit;
+      font-size: 17px;
+      padding: 0 14px
+    }
+
+    .ob input:focus-visible {
+      outline: 3px solid var(--blue);
+      outline-offset: 2px
+    }
+
+    .ob input[type=range] {
+      width: 100%;
+      height: 44px;
+      margin: 0;
+      accent-color: var(--blue)
+    }
+
+    .goalv {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--blue);
+      text-align: center;
+      margin: 6px 0 0
+    }
+
+    .scale {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--mute)
+    }
+
+    .hint {
+      font-size: 14px;
+      color: var(--mute);
+      text-align: center;
+      margin: 8px 0 0
+    }
+
+    .seg {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      border: 0;
+      padding: 0;
+      margin: 6px 0 0;
+      min-width: 0
+    }
+
+    .seg legend {
+      font-size: 16px;
+      font-weight: 600;
+      padding: 0;
+      margin-bottom: 8px
+    }
+
+    .seg label {
+      position: relative;
+      margin: 0
+    }
+
+    .seg input {
+      position: absolute;
+      opacity: 0;
+      width: 1px;
+      height: 1px
+    }
+
+    .seg span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      border-radius: 14px;
+      border: 1.5px solid var(--line);
+      background: var(--card);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer
+    }
+
+    .seg input:checked + span {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: var(--onblue);
+      font-weight: 800
+    }
+
+    .seg input:focus-visible + span {
+      outline: 3px solid var(--blue);
+      outline-offset: 2px
+    }
+
+    .ob .cta {
+      margin-top: auto;
+      min-height: 56px;
+      font-size: 20px
+    }
+
+    .history-list:focus-visible {
+      outline: 3px solid #5EB7FF;
+      outline-offset: 2px
     }
 
     @media (prefers-reduced-motion:reduce) {
@@ -577,18 +695,42 @@
 <body>
   <header>
     <h1>Protótipo: app de hidratação (MVP) · Cristiano Barichello</h1>
-    <p>Toque no botão grande para registrar água. Use “Simular lembrete” para ver a notificação na tela bloqueada e
-      registrar direto por ela.</p>
+    <p>Defina o nome, a meta e o intervalo dos lembretes no onboarding e toque em “Começar”. Depois, toque no botão grande para registrar água. Use “Simular lembrete” para ver a notificação na tela bloqueada e
+      registrar direto por ela. O histórico ao lado atualiza a cada registro.</p>
     <div class="chips" role="group" aria-label="Estados da tela">
       <button class="chip" data-s="0">Início do dia</button>
-      <button class="chip" data-s="1250">Em andamento</button>
-      <button class="chip" data-s="1750">Quase lá</button>
-      <button class="chip" data-s="2000">Meta atingida</button>
+      <button class="chip" data-s="half">Em andamento</button>
+      <button class="chip" data-s="near">Quase lá</button>
+      <button class="chip" data-s="full">Meta atingida</button>
       <button class="chip" id="sim">Simular lembrete</button>
     </div>
   </header>
 
   <main class="stage">
+    <div class="col">
+      <div class="phone" id="onb">
+        <div class="status"><span id="obTime"></span><span>●●● 5G</span></div>
+        <div class="ob">
+          <h2>Configuração Inicial</h2>
+          <label for="obName">Como podemos te chamar?</label>
+          <input type="text" id="obName" autocomplete="name" maxlength="40">
+          <label for="obGoal">Qual é a sua meta diária de água?</label>
+          <p class="goalv" id="obVal" aria-live="polite">2.500 ml</p>
+          <input type="range" id="obGoal" min="1000" max="5000" step="250" value="2500">
+          <div class="scale" aria-hidden="true"><span>1.000 ml</span><span>5.000 ml</span></div>
+          <p class="hint">Recomendado: 2.000 ml</p>
+          <fieldset class="seg">
+            <legend>Intervalo dos lembretes</legend>
+            <label><input type="radio" name="obInt" value="1"><span>1 h</span></label>
+            <label><input type="radio" name="obInt" value="2" checked><span>2 h</span></label>
+            <label><input type="radio" name="obInt" value="3"><span>3 h</span></label>
+          </fieldset>
+          <button class="cta" id="obStart">Começar</button>
+        </div>
+      </div>
+      <span class="cap">Onboarding</span>
+    </div>
+
     <div class="col">
       <div class="phone" id="app">
         <div class="status"><span id="timeLabel">14:00</span><span>●●● 5G</span></div>
@@ -605,7 +747,7 @@
           </div>
           <p class="msg" id="msg" aria-live="polite"></p>
           <div class="rem"><span aria-hidden="true">🔔</span><span id="next">Próximo lembrete às 16:00</span></div>
-          <button class="cta" id="add" aria-label="Registrar 250 mililitros de água"><span
+          <button class="cta" id="add" aria-label="Registrar 250 mililitros de água"><span id="ctaI"
               aria-hidden="true">💧</span><span id="ctaT">+ 250 ml</span></button>
           <button class="undo" id="undo" style="align-self:center">Desfazer</button>
         </div>
@@ -614,19 +756,19 @@
     </div>
 
     <div class="col">
-      <div class="history-card" aria-live="polite">
+      <div class="history-card">
         <div class="history-header">
           <div>
             <span class="eyebrow">Histórico diário</span>
             <h2>Consumo de hoje</h2>
           </div>
-          <div class="badge" id="dailyBadge">0 ml</div>
+          <div class="badge" id="dailyBadge" aria-live="polite">0 ml</div>
         </div>
 
         <div class="history-totals">
           <div>
-            <strong id="historyTotal">0 ml</strong>
-            <small>registrados</small>
+            <strong id="historyCount">0</strong>
+            <small>registros</small>
           </div>
           <div>
             <strong id="historyGoalPercent">0%</strong>
@@ -634,7 +776,7 @@
           </div>
         </div>
 
-        <ul class="history-list" id="historyList"></ul>
+        <ul class="history-list" id="historyList" tabindex="0" aria-label="Registros de hoje"></ul>
 
         <div class="history-week">
           <h3>Últimos 7 dias</h3>
@@ -658,9 +800,10 @@
 
   <script>
     (function () {
-      var GOAL = 2000, STEP = 250, ml = 0, hist = [], timer = null, nextH = 16;
+      var GOAL = 2500, USER = "Cristiano Barichello", INTERVAL = 2, STEP = 250, ml = 0, hist = [], timer = null, ctaTimer = null;
       var history = loadHistory();
       var todayKey = getDateKey(new Date());
+      loadProfile();
       var $ = function (i) { return document.getElementById(i) };
       var arc = $("arc");
 
@@ -670,6 +813,17 @@
         var m = String(d.getMonth() + 1).padStart(2, '0');
         var day = String(d.getDate()).padStart(2, '0');
         return y + '-' + m + '-' + day;
+      }
+
+      function loadProfile() {
+        try {
+          var p = JSON.parse(localStorage.getItem('bebaAguaProfile') || 'null');
+          if (p && p.name) { USER = p.name; GOAL = Number(p.goal) || GOAL; if ([1, 2, 3].indexOf(Number(p.interval)) > -1) INTERVAL = Number(p.interval); }
+        } catch (e) { }
+      }
+
+      function saveProfile() {
+        try { localStorage.setItem('bebaAguaProfile', JSON.stringify({ name: USER, goal: GOAL, interval: INTERVAL })); } catch (e) { }
       }
 
       function fmt(n) { return Number(n || 0).toLocaleString("pt-BR") }
@@ -694,7 +848,7 @@
           var left = total;
           while (left > 0) {
             var piece = Math.min(STEP, left);
-            entries.push({ amount: piece, when: new Date(d.getFullYear(), d.getMonth(), d.getDate(), 8 + entries.length * 2, 20 + entries.length * 18).toISOString() });
+            entries.push({ amount: piece, timestamp: new Date(d.getFullYear(), d.getMonth(), d.getDate(), 8 + entries.length * 2, 20 + entries.length * 18).toISOString() });
             left -= piece;
           }
           seeded[key] = entries;
@@ -705,15 +859,20 @@
       function loadHistory() {
         try {
           var saved = JSON.parse(localStorage.getItem('bebaAguaHistory') || 'null');
-          if (saved && typeof saved === 'object') return saved;
+          if (saved && typeof saved === 'object') {
+            Object.keys(saved).forEach(function (k) {
+              (saved[k] || []).forEach(function (e) { if (!e.timestamp && e.when) e.timestamp = e.when; });
+            });
+            return saved;
+          }
         } catch (e) { }
         var seeded = buildSeedHistory();
-        localStorage.setItem('bebaAguaHistory', JSON.stringify(seeded));
+        try { localStorage.setItem('bebaAguaHistory', JSON.stringify(seeded)); } catch (e) { }
         return seeded;
       }
 
       function saveHistory() {
-        localStorage.setItem('bebaAguaHistory', JSON.stringify(history));
+        try { localStorage.setItem('bebaAguaHistory', JSON.stringify(history)); } catch (e) { }
       }
 
       function getEntriesForToday() {
@@ -735,7 +894,7 @@
         if (ml >= GOAL) return "Meta batida! Parabéns 🎉";
         if (ml === 0) return "Vamos começar? Toque no botão abaixo.";
         if (GOAL - ml <= 500) return "Falta pouco: restam " + fmt(GOAL - ml) + " ml.";
-        return added ? "Boa! Mais um copo." : "Hidratação em dia 💧";
+        return added ? "Boa! Mais um copo. 💧" : "Hidratação em dia 💧";
       }
 
       function renderHistory() {
@@ -744,14 +903,14 @@
         var pct = Math.round(Math.min(totalToday / GOAL, 1) * 100);
 
         $("dailyBadge").textContent = fmt(totalToday) + " ml";
-        $("historyTotal").textContent = fmt(totalToday) + " ml";
+        $("historyCount").textContent = entries.length;
         $("historyGoalPercent").textContent = pct + "%";
 
         if (!entries.length) {
           $("historyList").innerHTML = '<li class="history-empty">Ainda não houve registro hoje.</li>';
         } else {
           var markup = entries.slice().reverse().map(function (entry) {
-            var when = new Date(entry.when);
+            var when = new Date(entry.timestamp);
             return '<li><span>' + when.toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' }) + '</span><strong>+' + fmt(entry.amount) + ' ml</strong></li>';
           }).join('');
           $("historyList").innerHTML = markup;
@@ -781,14 +940,36 @@
         var p = Math.min(ml / GOAL, 1), pc = Math.round(p * 100);
         arc.style.strokeDashoffset = 628.3 * (1 - p);
         $("cur").textContent = fmt(ml) + " ml";
+        $("goal").textContent = "de " + fmt(GOAL) + " ml";
         $("pct").textContent = pc + "%";
         $("msg").textContent = msgFor(added);
         $("heroLabel").setAttribute("aria-label", "Progresso de hoje: " + fmt(ml) + " de " + fmt(GOAL) + " mililitros, " + pc + " por cento");
         $("app").classList.toggle("done", ml >= GOAL);
         $("ctaT").textContent = ml >= GOAL ? "Meta atingida!" : "+ 250 ml";
-        $("next").textContent = "Próximo lembrete às " + nextH + ":00";
-        $("timeLabel").textContent = new Date().toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit', hour12: false });
+        tick();
+      }
+
+      function hhmm(d) { return d.toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit', hour12: false }); }
+
+      // Lembretes a cada 2 h, entre 8h e 20h, contados a partir do último registro
+      function nextReminderText() {
+        var now = new Date(), es = getEntriesForToday();
+        var base = es.length ? new Date(es[es.length - 1].timestamp) : now;
+        var nx = new Date(base.getTime() + INTERVAL * 3600000);
+        var start = new Date(now); start.setHours(8, 0, 0, 0);
+        var end = new Date(now); end.setHours(20, 0, 0, 0);
+        if (now >= end) return "Próximo lembrete amanhã às 08:00";
+        if (nx < start) nx = start;
+        if (nx <= now) return "Lembrete: está na hora";
+        if (nx > end) return "Próximo lembrete amanhã às 08:00";
+        return "Próximo lembrete às " + hhmm(nx);
+      }
+
+      function tick() {
+        $("next").textContent = nextReminderText();
+        $("timeLabel").textContent = hhmm(new Date());
         $("lockTime").textContent = $("timeLabel").textContent;
+        $("obTime").textContent = $("timeLabel").textContent;
       }
 
       function updateDateLabels() {
@@ -796,17 +977,18 @@
         var dateText = now.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
         $("date").textContent = dateText;
         $("lockDate").textContent = dateText;
-        $("hello").textContent = now.getHours() < 12 ? "Bom dia, Cristiano" : now.getHours() < 18 ? "Boa tarde, Cristiano" : "Boa noite, Cristiano";
+        $("hello").textContent = (now.getHours() < 12 ? "Bom dia" : now.getHours() < 18 ? "Boa tarde" : "Boa noite") + (USER.trim() ? ", " + USER.trim().split(/\s+/)[0] : "");
       }
 
       function add() {
-        var entry = { amount: STEP, when: new Date().toISOString() };
+        var entry = { amount: STEP, timestamp: new Date().toISOString() };
         if (!history[todayKey]) history[todayKey] = [];
         history[todayKey].push(entry);
         setCurrentMl();
-        nextH = 16;
         saveHistory();
         try { navigator.vibrate && navigator.vibrate(30) } catch (e) { }
+        var ci = $("ctaI"); ci.textContent = "✓";
+        clearTimeout(ctaTimer); ctaTimer = setTimeout(function () { ci.textContent = "💧" }, 1500);
         renderHistory();
         render(true);
         var u = $("undo"); u.classList.add("on");
@@ -830,9 +1012,10 @@
       }
 
       function notify() {
-        var t, b;
+        var t, b, es = getEntriesForToday();
+        var hours = es.length ? (Date.now() - new Date(es[es.length - 1].timestamp)) / 3600000 : null;
         if (ml > 0 && GOAL - ml <= 500 && ml < GOAL) { t = "Quase lá!"; b = "Faltam só " + fmt(GOAL - ml) + " ml." }
-        else if (ml === 0) { t = "Sua água está esperando"; b = "Que tal um copo agora?" }
+        else if (hours === null || hours > INTERVAL + 1) { t = "Sua água está esperando"; b = "Que tal um copo agora?" }
         else { t = "Hora de beber água 💧"; b = "Um gole agora faz diferença." }
         var box = $("notifs");
         box.innerHTML = '<div class="n"><small>Hidrata · agora</small><h4>' + t + '</h4><p>' + b + '</p><button class="act" id="nAct">Bebi 250 ml</button></div>';
@@ -843,15 +1026,38 @@
       $("undo").addEventListener("click", undo);
       $("sim").addEventListener("click", notify);
 
+      var obName = $("obName"), obGoal = $("obGoal");
+      function showGoal() {
+        var v = Number(obGoal.value);
+        $("obVal").textContent = fmt(v) + " ml";
+        obGoal.setAttribute("aria-valuetext", fmt(v) + " mililitros");
+      }
+      obName.value = USER; obGoal.value = GOAL; showGoal();
+      function getInt() { var r = document.querySelector('input[name="obInt"]:checked'); return r ? Number(r.value) : INTERVAL; }
+      var ir = document.querySelector('input[name="obInt"][value="' + INTERVAL + '"]'); if (ir) ir.checked = true;
+      document.querySelectorAll('input[name="obInt"]').forEach(function (r) {
+        r.addEventListener("change", function () { INTERVAL = getInt(); tick(); });
+      });
+      obGoal.addEventListener("input", function () {
+        showGoal(); GOAL = Number(obGoal.value); renderHistory(); render(false);
+      });
+      $("obStart").addEventListener("click", function () {
+        USER = obName.value.trim() || USER; GOAL = Number(obGoal.value); INTERVAL = getInt();
+        saveProfile(); updateDateLabels(); renderHistory(); render(false);
+        $("app").scrollIntoView({ block: "center" });
+        $("add").focus({ preventScroll: true });
+      });
+
       document.querySelectorAll("[data-s]").forEach(function (c) {
         c.addEventListener("click", function () {
-          var value = +c.dataset.s;
+          var key = c.dataset.s;
+          var value = key === "0" ? 0 : key === "half" ? Math.round(GOAL / 2 / STEP) * STEP : key === "near" ? GOAL - 500 : GOAL;
           history[todayKey] = [];
           if (value > 0) {
-            var total = value;
-            while (total > 0) {
-              history[todayKey].push({ amount: Math.min(STEP, total), when: new Date().toISOString() });
-              total -= STEP;
+            var n = Math.ceil(value / STEP), left = value, now = Date.now(), dayStart = new Date().setHours(0, 0, 0, 0);
+            for (var k = 0; k < n; k++) {
+              var amt = Math.min(STEP, left); left -= amt;
+              history[todayKey].push({ amount: amt, timestamp: new Date(Math.max(dayStart, now - (n - 1 - k) * 20 * 60000)).toISOString() });
             }
           }
           setCurrentMl();
@@ -866,6 +1072,7 @@
       setCurrentMl();
       renderHistory();
       render(false);
+      setInterval(tick, 30000);
     })();
   </script>
 </body>
